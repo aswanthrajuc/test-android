@@ -34,6 +34,23 @@ jobs:
     - name: Push Image
       run: docker push rg23aks-eehybhbhdxh8cyb9.azurecr.io/test1:nginx-v1
 
+    - name: create ACR image pull request
+      run: |
+        kubectl create secret docker-registry acr-secret \
+          --docker-server=${{ env.AZURE_CONTAINER_REGISTRY }} \
+          --docker-username=${{ secrets.ACR_USERNAME }} \
+          --docker-password=${{ secrets.ACR_PASSWORD }} \
+          --namespace ${{ env.NAMESPACE }} \
+          --dry-run=client -o yaml | kubectl apply -f -
+
+    - name: K8s deployment
+      run: |
+        kubectl apply -f Deployment/k8s.yml
+        
+     
+ 
+
+
     # - name: Setup .NET 8
     #   uses: actions/setup-dotnet@v4
     #   with:
