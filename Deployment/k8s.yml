@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test1
+  namespace: dev
+  labels:
+    app.kubernetes.io/name: test1
+spec:
+  selector:
+    matchLables:
+      app.kubernetes.io/name: test1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: test1
+spec:
+      imagePullSecrets:
+      -name: test1-acr-secret  # add pull secret
+      containers:
+        - name: harshalitetenantdev
+          image: rg23aks-eehybhbhdxh8cyb9.azurecr.io/test1:nginx-v1
+          imagePullPolicy: Always
+ ports:
+   - name: http
+ containerPort: 8080
+ protocol: TCP
+ resources:
+   requests:
+ cpu: "200"
+ memory: "1Gi"
+limits:
+ cpu: "500m"
+ memory:"1Gi"
+---
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: test1
+  namespace: dev
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: test1
+  minReplicas: 1
+  maxReplicas: 2
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test1
+  metadata: dev
+spec:
+  #type: clusterIP
+  type: LoadBalancer
+  selector:
+    app: kubernetes.io/name:test1   app # Matches Pods with the label 'app=test1'
+  ports:
+    - name: http
+ protocol: TCP
+      port: 80 # The port the Service itself exposes within the cluster
+      targetPort: 8080 # The port on the Pods where the application is listening
+
+
