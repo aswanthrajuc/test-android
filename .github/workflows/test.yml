@@ -29,7 +29,7 @@ jobs:
       run: docker pull nginx
 
     - name: Tag Image
-      run: docker tag rg23aks-eehybhbhdxh8cyb9.azurecr.io/test1:nginx-v1
+      run: docker tag nginx rg23aks-eehybhbhdxh8cyb9.azurecr.io/test1:nginx-v1
 
     - name: Push Image
       run: docker push rg23aks-eehybhbhdxh8cyb9.azurecr.io/test1:nginx-v1
