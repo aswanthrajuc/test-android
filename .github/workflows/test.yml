@@ -1,0 +1,34 @@
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+ 
+env:
+  AZURE_CONTAINER_REGISTRY: rg23aks-eehybhbhdxh8cyb9.azurecr.io # set this to the name of your container registry
+  IMAGE_NAME: test1              # set this to your project's name
+  AKS_RESOURCE_GROUP: rg123
+  AKS_CLUSTER_NAME: k8cluster
+  NAMESPACE: dev
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 8
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Resource dependancies
+      run: dotnet restore
+   
+    - name: Build
+      run: dotnet build --no-restore --verbosity normal
+
+    - name: Build and Push Docker Image
+      run: |
+      docker build -t test1 .
