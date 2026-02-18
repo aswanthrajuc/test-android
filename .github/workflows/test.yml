@@ -36,7 +36,7 @@ jobs:
 
     - name: create ACR image pull request
       run: |
-        kubectl create secret docker-registry acr-secret \
+        kubectl create secret docker-registry test1-acr-secret \
           --docker-server=${{ env.AZURE_CONTAINER_REGISTRY }} \
           --docker-username=${{ secrets.ACR_USERNAME }} \
           --docker-password=${{ secrets.ACR_PASSWORD }} \
