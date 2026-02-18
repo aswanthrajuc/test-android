@@ -45,6 +45,6 @@ jobs:
     # - name: Build
     #   run: dotnet build --no-restore --verbosity normal
 
-    - name: Build and Push Docker Image
-      run: |
-        docker build -t test1 .
+    # - name: Build and Push Docker Image
+    #   run: |
+    #     docker build -t test1 .
