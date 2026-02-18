@@ -31,4 +31,4 @@ jobs:
 
     - name: Build and Push Docker Image
       run: |
-      docker build -t test1 .
+        docker build -t test1 .
